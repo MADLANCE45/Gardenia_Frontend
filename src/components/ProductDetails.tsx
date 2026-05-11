@@ -10,7 +10,7 @@ interface ProductImage {
 interface Product {
   id: number;
   name: string;
-  price: number;
+  price: number;i
   stock: number;
   subcategoryId: number;
   isDeleted?: boolean;
