@@ -2,7 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import Header from './components/Header'; 
 import Login from './components/Login';
-
+import Register from './components/Register.tsx';
+import Home from './components/Home.tsx';
+import ProductDetails from './components/ProductDetails.tsx';
 function App() {
   return (
     <BrowserRouter>
@@ -17,6 +19,12 @@ function App() {
           {/* Le nostre pagine */}
           <Route path="/login" element={<Login />} />
           
+          <Route path="/register" element={<Register />} />
+
+          <Route path="/home" element={<Home />} />
+
+           <Route path="/ProductDetails" element={<ProductDetails />} />
+
         </Routes>
       </main>
     </BrowserRouter>

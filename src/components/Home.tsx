@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import './home.css'; // Il tuo CSS originale!
+import './Home.css'; 
 
-// Opzionale: definire l'interfaccia base per il Prodotto (TypeScript)
+// Definiamo il tipo per TypeScript (come avevi in Angular)
 interface Product {
   id: number;
   name: string;
@@ -13,67 +13,61 @@ interface Product {
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  
-  // 1. GESTIONE DELL'URL (Sostituisce ActivatedRoute)
   const { categoryName, subcategoryName } = useParams();
   const [searchParams] = useSearchParams();
   const subcategoryId = searchParams.get('subcategoryId');
 
-  // 2. STATO DEL COMPONENTE (Sostituiscono i signal di Angular)
+  // Stato (equivalente a signal() in Angular)
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [pageIndex, setPageIndex] = useState<number>(0);
 
   const pageSize = 10;
-  const isHome = !(categoryName && subcategoryName); // Se non ci sono categorie nell'URL, siamo nella Home vera e propria
+  const isHome = !(categoryName && subcategoryName);
 
-  // 3. EFFETTO: CARICAMENTO DATI (Sostituisce ngOnInit)
+  // Caricamento dei prodotti (equivalente a ngOnInit)
   useEffect(() => {
-    // Quando cambia la categoria, resettiamo la pagina a 0
-    setPageIndex(0);
+    setPageIndex(0); // Resetta la pagina quando cambi categoria
 
     const fetchProducts = async () => {
       setLoading(true);
       setError(null);
       
       try {
-        // Verifica con il tuo controller Spring Boot i path esatti!
-        // Presumo che se c'è subcategoryId chiami un endpoint, altrimenti chiami la lista completa
-        let url = 'http://localhost:8080/rest/product/list'; // Sostituisci con il tuo VERO endpoint "getAllProducts"
-        
-        if (subcategoryId) {
-          url = `http://localhost:8080/rest/product/subcategory/${subcategoryId}`; // Sostituisci con il tuo VERO endpoint per le sottocategorie
-        }
+        // ROTTE AGGIORNATE IN BASE AL TUO PRODUCTCONTROLLER JAVA
+        const url = subcategoryId 
+          ? `http://localhost:8080/rest/product/findBySubcategory?subcategoryId=${subcategoryId}`
+          : `http://localhost:8080/rest/product/list`;
 
         const response = await fetch(url);
+        
         if (response.ok) {
           const data = await response.json();
-          // Se il tuo backend restituisce l'array dentro un oggetto (es. data.object),
-          // assicurati di estrarlo correttamente. Ad esempio: setProducts(data.object);
+          // Il tuo backend dovrebbe restituire direttamente la lista o un oggetto Resp.
+          // Se la griglia è vuota dopo aver caricato, potresti dover scrivere: setProducts(data.object || data);
           setProducts(data);
         } else {
-          setError('Failed to load products');
+          setError('Impossibile caricare i prodotti dal server.');
         }
       } catch (err) {
         console.error(err);
-        setError('Failed to load products. Server unreachable.');
+        setError('Errore di connessione. Il backend Spring Boot è acceso?');
       } finally {
         setLoading(false);
       }
     };
-
     fetchProducts();
-  }, [categoryName, subcategoryName, subcategoryId]); // L'effetto riparte se questi cambiano
+  }, [categoryName, subcategoryName, subcategoryId]);
 
-  // 4. LOGICA DI SUPPORTO (Metodi e Getters)
+  // Funzioni di supporto
   const navigateToProductDetails = (productId: number) => {
     navigate(`/product/${productId}`);
   };
 
   const getImageUrl = (product: Product): string => {
     if (!product || !product.images || product.images.length === 0) {
-      return '/assets/no-image.png'; // Attenzione al path in React (dentro la cartella public)
+      return '/img/image.png'; // Immagine di fallback (assumendo che sia nella cartella public/img)
     }
     const link = product.images[0].link;
     return link.startsWith('http') ? link : `http://localhost:8080/rest/image/file/${link}`;
@@ -81,74 +75,53 @@ const Home: React.FC = () => {
 
   const handlePageChange = (newIndex: number) => {
     setPageIndex(newIndex);
-    window.scrollTo({ top: 300, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Proprietà calcolate per la paginazione
+  // Paginazione
   const totalPagesCount = Math.ceil(products.length / pageSize);
-
-  const getVisiblePages = () => {
-    const total = totalPagesCount;
-    const current = pageIndex;
-    const maxVisible = 5;
-
-    let start = Math.max(0, current - Math.floor(maxVisible / 2));
-    let end = Math.min(total, start + maxVisible);
-
-    if (end - start < maxVisible) {
-      start = Math.max(0, end - maxVisible);
-    }
-
-    const pages = [];
-    for (let i = start; i < end; i++) {
-      pages.push(i);
-    }
-    return pages;
-  };
-
-  const visiblePages = getVisiblePages();
   const paginatedProducts = products.slice(pageIndex * pageSize, (pageIndex + 1) * pageSize);
 
-  // 5. VIEW (Il template JSX)
   return (
     <div className="home-container">
-      {/* Banner */}
+      {/* Mostra il banner solo se siamo nella vera Home */}
       {isHome && (
         <div className="banner-wrapper">
           <div className="banner-container">
             <div className="banner-content">
               <span className="banner-text">Welcome to</span>
-              <img src="/img/image3.png" alt="Gardenia Logo" className="banner-logo" />
+              {/* Usa il logo dalla cartella public di Vite */}
+              <img src="/img/image3.png" alt="Gardenia Logo" className="banner-logo" /> 
             </div>
           </div>
         </div>
       )}
 
-      {/* Sezione Prodotti */}
       <section className="products-section">
         <div className="products-container">
           
+          {/* Gestione Stato: Caricamento, Errore, Vuoto */}
           {loading ? (
-            <div className="loading-message"><p>Loading products...</p></div>
+            <div className="loading-message"><p>Caricamento prodotti in corso...</p></div>
           ) : error ? (
-            <div className="error-message"><p>{error}</p></div>
+            <div className="error-message" style={{color: 'red', textAlign: 'center'}}><p>{error}</p></div>
           ) : products.length === 0 ? (
-            <div className="empty-message"><p>No products found</p></div>
+            <div className="empty-message"><p>Nessun prodotto trovato in questa categoria.</p></div>
           ) : (
             <>
               {/* Griglia Prodotti */}
               <div className="products-grid">
                 {paginatedProducts.map((product) => (
                   <div className="product-card" key={product.id}>
-                    <div className="product-image" onClick={() => navigateToProductDetails(product.id)}>
+                    <div className="product-image" onClick={() => navigateToProductDetails(product.id)} style={{cursor: 'pointer'}}>
                       <img src={getImageUrl(product)} alt={product.name} className="card-image" />
                     </div>
                     <div className="product-info">
-                      <h3 className="product-name" onClick={() => navigateToProductDetails(product.id)}>
+                      <h3 className="product-name" onClick={() => navigateToProductDetails(product.id)} style={{cursor: 'pointer'}}>
                         {product.name}
                       </h3>
                       <p className="product-price">€{product.price.toFixed(2)}</p>
-                      <p className={`product-stock ${product.stock < 5 ? 'low-stock' : ''}`}>
+                      <p className={`product-stock ${product.stock < 5 ? 'low-stock' : ''}`} style={{color: product.stock < 5 ? 'red' : 'green'}}>
                         Stock: {product.stock}
                       </p>
                     </div>
@@ -158,45 +131,14 @@ const Home: React.FC = () => {
 
               {/* Paginazione */}
               {products.length > pageSize && (
-                <div className="pagination-wrapper">
-                  <div className="pagination-row">
-                    <button className="nav-arrow" disabled={pageIndex === 0} onClick={() => handlePageChange(0)}>
-                      <span className="material-icons">first_page</span>
-                    </button>
-
-                    <button className="nav-arrow" disabled={pageIndex === 0} onClick={() => handlePageChange(pageIndex - 1)}>
-                      <span className="material-icons">chevron_left</span>
-                    </button>
-
-                    <div className="page-numbers-row">
-                      {visiblePages[0] > 0 && <span className="dots">...</span>}
-
-                      {visiblePages.map((n) => (
-                        <button
-                          key={n}
-                          className={`page-num-btn ${n === pageIndex ? 'active' : ''}`}
-                          onClick={() => handlePageChange(n)}
-                        >
-                          {n + 1}
-                        </button>
-                      ))}
-
-                      {visiblePages[visiblePages.length - 1] < totalPagesCount - 1 && <span className="dots">...</span>}
-                    </div>
-
-                    <button className="nav-arrow" disabled={pageIndex >= totalPagesCount - 1} onClick={() => handlePageChange(pageIndex + 1)}>
-                      <span className="material-icons">chevron_right</span>
-                    </button>
-
-                    <button className="nav-arrow" disabled={pageIndex >= totalPagesCount - 1} onClick={() => handlePageChange(totalPagesCount - 1)}>
-                      <span className="material-icons">last_page</span>
-                    </button>
-                  </div>
-
-                  <div className="pagination-info">
-                    {pageIndex * pageSize + 1} – {Math.min((pageIndex + 1) * pageSize, products.length)}{' '}
-                    <span className="total-count">of {products.length}</span>
-                  </div>
+                <div className="pagination-wrapper" style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                  <button disabled={pageIndex === 0} onClick={() => handlePageChange(pageIndex - 1)}>
+                    Precedente
+                  </button>
+                  <span>Pagina {pageIndex + 1} di {totalPagesCount}</span>
+                  <button disabled={pageIndex >= totalPagesCount - 1} onClick={() => handlePageChange(pageIndex + 1)}>
+                    Successiva
+                  </button>
                 </div>
               )}
             </>
