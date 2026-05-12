@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register.tsx';
 import Home from './components/Home.tsx';
 import ProductDetails from './components/ProductDetails.tsx';
+
 function App() {
   return (
     <BrowserRouter>
@@ -18,12 +19,11 @@ function App() {
           
           {/* Le nostre pagine */}
           <Route path="/login" element={<Login />} />
-          
           <Route path="/register" element={<Register />} />
-
           <Route path="/home" element={<Home />} />
 
-           <Route path="/ProductDetails" element={<ProductDetails />} />
+          {/* ROTTA CORRETTA PER IL DETTAGLIO PRODOTTO */}
+          <Route path="/product/:id" element={<ProductDetails />} />
 
         </Routes>
       </main>
