@@ -21,11 +21,9 @@ const Header: React.FC = () => {
   { id: 4, name: 'Forniture' }
 ];
   const subcategoriesMap: Record<number, any[]> = {
-  1: [{ id: 10, subcategoryName: 'Interno' }, { id: 11, subcategoryName: 'Esterno' }],
-  2: [{ id: 20, subcategoryName: 'Da Frutto' }, { id: 21, subcategoryName: 'Ornamentali' }],
-  3: [{ id: 30, subcategoryName: 'Giardinaggio' }],
-  4: [{ id: 40, subcategoryName: 'Concimi' }]
-};
+    1: [{ id: 10, subcategoryName: 'Interno' }, { id: 11, subcategoryName: 'Esterno' }]
+  };
+
   const toggleMenu = (name: string, e: React.MouseEvent) => {
     setActiveMenu(activeMenu === name ? null : name);
   };
