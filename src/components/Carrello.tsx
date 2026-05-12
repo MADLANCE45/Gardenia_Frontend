@@ -98,9 +98,21 @@ const Carrello: React.FC = () => {
           
           <div style={{ textAlign: 'right', marginTop: '30px', padding: '20px', background: '#f1f8e9', borderRadius: '8px' }}>
             <h2 style={{ margin: '0 0 15px 0' }}>Totale Ordine: € {total.toFixed(2)}</h2>
-            <button style={{ background: '#2e7d32', color: 'white', padding: '15px 30px', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}>
-              PROCEDI ALL'ACQUISTO
-            </button>
+           <button 
+  onClick={() => navigate('/pagamento')} // Questo attiverà la rotta che abbiamo appena aggiunto
+  style={{ 
+    background: '#2e7d32', 
+    color: 'white', 
+    padding: '15px 30px', 
+    border: 'none', 
+    borderRadius: '5px', 
+    cursor: 'pointer', 
+    fontWeight: 'bold', 
+    fontSize: '16px' 
+  }}
+>
+  PROCEDI ALL'ACQUISTO
+</button>
           </div>
         </>
       )}

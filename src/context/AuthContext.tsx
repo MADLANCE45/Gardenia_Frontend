@@ -1,11 +1,11 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export interface User {
   id: number;
   nome: string;
   cognome: string;
   ruolo: string;
-  userName?: string; // Aggiunto per compatibilità con il tuo carrello
+  userName?: string; 
 }
 
 interface AuthContextType {
@@ -23,9 +23,17 @@ export const AuthContext = createContext<AuthContextType>({
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
+  // Aggiungi questo: Controlla se c'è un utente nel localStorage al caricamento dell'app
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   const login = (userData: User) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData)); // Salviamo l'utente per il carrello
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = () => {

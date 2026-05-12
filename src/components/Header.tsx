@@ -78,52 +78,44 @@ const Header: React.FC = () => {
               <li><Link to="/about-us">About Us</Link></li>
             </ul>
           </nav>
-
+              
           <div className="user-actions">
-            {isLoggedIn && (
-              <Link to="/user/wishlist" className="action-link">
-                <i className="bi bi-heart"></i>
-                <span>Wishlist</span>
-              </Link>
-            )}
+  {/* Il blocco Wishlist è stato rimosso completamente */}
 
-            <Link to="/carrello" className="action-link cart-link">
-              <div className="icon-container">
-                <i className="bi bi-cart3"></i>
-                {cartCount > 0 && (
-                  <span className="cart-count">
-                    {cartCount}
-                  </span>
-                )}
-              </div>
-              <span>Cart</span>
-            </Link>
+  <Link to="/carrello" className="action-link cart-link">
+    <div className="icon-container">
+      <i className="bi bi-cart3"></i>
+      {cartCount > 0 && <span className="cart-count">{cartCount}</span>}
+    </div>
+    <span>Cart</span>
+  </Link>
 
-            {isAdmin && (
-              <Link to="/admin" className="action-link">
-                <i className="bi bi-shield-lock"></i>
-                <span>Admin</span>
-              </Link>
-            )}
+  {isAdmin && (
+    <Link to="/admin" className="action-link">
+      <i className="bi bi-shield-lock"></i>
+      <span>Admin</span>
+    </Link>
+  )}
 
-            {isLoggedIn ? (
-              <>
-                <Link to="/user/overview" className="action-link text-decoration-none">
-                  <i className="bi bi-person-circle text-success fs-4"></i>
-                  <span className="fw-bold" style={{ fontSize: '14px' }}>Ciao, {user?.nome}</span> 
-                </Link>
-                <button onClick={logout} className="action-link btn-logout">
-                  <i className="bi bi-box-arrow-right text-danger fs-5"></i>
-                  <span style={{ fontSize: '13px' }}>Logout</span>
-                </button>
-              </>
-            ) : (
-              <Link to="/login" className="action-link">
-                <i className="bi bi-person"></i>
-                <span>Accedi</span>
-              </Link>
-            )}
-          </div>
+  {isLoggedIn ? (
+    <>
+      <Link to="/user/overview" className="action-link text-decoration-none">
+        <i className="bi bi-person-circle text-success fs-4"></i>
+        {/* Usiamo user.nome che ora verrà popolato correttamente */}
+        <span className="fw-bold" style={{ fontSize: '14px' }}>Ciao, {user?.nome}</span> 
+      </Link>
+      <button onClick={logout} className="action-link btn-logout">
+        <i className="bi bi-box-arrow-right text-danger fs-5"></i>
+        <span style={{ fontSize: '13px' }}>Logout</span>
+      </button>
+    </>
+  ) : (
+    <Link to="/login" className="action-link">
+      <i className="bi bi-person"></i>
+      <span>Accedi</span>
+    </Link>
+  )}
+</div>
         </div>
       </div>
     </header>
