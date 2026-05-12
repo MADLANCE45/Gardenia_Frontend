@@ -6,28 +6,33 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ProductDetails from './components/ProductDetails';
 import Carrello from './components/Carrello';
+import Footer from './components/Footer';
+// IMPORTA I PROVIDER QUI:
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 
 function App() {
-  // NOTA: Abbiamo rimosso cartCounter da qui perché ora usiamo il CartContext!
-
   return (
-    <Router>
-      {/* L'Header ora legge il carrello da solo tramite useContext */}
-      <Header /> 
-      
-      <div style={{ width: '100%', minHeight: '80vh' }}>
-        <Routes>
-          {/* Reindirizziamo la root alla home o al login */}
-          <Route path="/" element={<Navigate to="/home" />} />
+    <AuthProvider>
+      <CartProvider>
+        <Router>
+          <Header /> 
           
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/carrello" element={<Carrello />} />
-        </Routes>
-      </div>
-    </Router>
+          <div style={{ width: '100%', minHeight: '80vh' }}>
+            <Routes>
+              <Route path="/" element={<Navigate to="/home" />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/carrello" element={<Carrello />} />
+            </Routes>
+            
+          </div>
+          <Footer />
+        </Router>
+      </CartProvider>
+    </AuthProvider>
   );
 }
 

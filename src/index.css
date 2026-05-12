@@ -1,28 +1,15 @@
-/* src/index.css */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background-color: #f8f9fa; /* Grigio chiaro per lo sfondo */
-  color: #333;
-  width: 100%;
-  overflow-x: hidden;
+/* Effetto Hover per le icone utente */
+.action-link {
+  transition: color 0.3s ease;
+}
+.action-link:hover {
+  color: #035826 !important;
 }
 
-#root {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+/* Effetto Hover per il menu centrale */
+.nav-menu-link {
+  position: relative;
 }
-
-/* Rimuoviamo eventuali allineamenti forzati che schiacciano i componenti */
-.container, .container-fluid {
-  width: 100%;
-  padding-right: var(--bs-gutter-x, .75rem);
-  padding-left: var(--bs-gutter-x, .75rem);
-  margin-right: auto;
-  margin-left: auto;
+.nav-menu-link:hover {
+  color: #035a27 !important;
 }

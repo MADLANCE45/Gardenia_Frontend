@@ -1,59 +1,59 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
+  // Variabili di stato necessarie per il form
+  const [nome, setNome] = useState('');
+  const [cognome, setCognome] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  
   const navigate = useNavigate();
-  // NOTA: I nomi devono essere uguali al tuo DTO UserReq.java
-  const [formData, setFormData] = useState({
-    nome: '',
-    cognome: '',
-    userName: '', 
-    email: '',
-    pwd: '', // Controlla se in UserReq.java si chiama 'pwd' o 'password'
-    telefono: ''
-  });
-  const [message, setMessage] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Funzione che gestisce la registrazione
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      // Chiamata alla tua rotta Java
-      const response = await fetch('http://localhost:8080/rest/user/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setMessage('Registrazione completata! Ora puoi fare il login.');
-        setTimeout(() => navigate('/login'), 2000);
-      } else {
-        setMessage('Errore durante la registrazione.');
-      }
-    } catch (error) {
-      setMessage('Errore di connessione al server.');
-    }
+    setErrorMsg('');
+    
+    // Qui andrà la chiamata fetch POST al tuo backend per la registrazione
+    console.log("Dati di registrazione pronti:", { nome, cognome, email, password });
+    
+    // Dopo essersi registrato, lo rimandiamo al login
+    navigate('/login');
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ddd' }}>
-      <h2>Registrati</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <input type="text" name="nome" placeholder="Nome" onChange={handleChange} required />
-        <input type="text" name="cognome" placeholder="Cognome" onChange={handleChange} required />
-        <input type="text" name="userName" placeholder="Username" onChange={handleChange} required />
-        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
-        {/* Assicurati che il 'name' combaci con la variabile Java */}
-        <input type="password" name="pwd" placeholder="Password" onChange={handleChange} required />
-        <input type="text" name="telefono" placeholder="Telefono" onChange={handleChange} />
-        <button type="submit" style={{ background: '#2e7d32', color: 'white', padding: '10px' }}>Registrati</button>
-      </form>
-      <Link to="/login">Torna al Login</Link>
+    <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '80vh', width: '100%', padding: '20px' }}>
+      <div className="card shadow-sm p-4" style={{ width: '100%', maxWidth: '500px', borderRadius: '15px' }}>
+        <h2 className="text-center mb-4" style={{ color: '#035826', fontWeight: 'bold' }}>Registrati</h2>
+        
+        {errorMsg && <div className="alert alert-danger py-2 text-center">{errorMsg}</div>}
+        
+        <form onSubmit={handleRegister}>
+          <div className="row">
+            <div className="col-md-6 mb-3">
+              <label className="form-label">Nome</label>
+              <input type="text" className="form-control" value={nome} onChange={(e) => setNome(e.target.value)} required />
+            </div>
+            <div className="col-md-6 mb-3">
+              <label className="form-label">Cognome</label>
+              <input type="text" className="form-control" value={cognome} onChange={(e) => setCognome(e.target.value)} required />
+            </div>
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Email</label>
+            <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </div>
+          <div className="mb-4">
+            <label className="form-label">Password</label>
+            <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </div>
+          <button type="submit" className="btn w-100 fw-bold text-white" style={{ backgroundColor: '#035826', padding: '10px' }}>
+            Crea Account
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

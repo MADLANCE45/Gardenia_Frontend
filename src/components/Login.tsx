@@ -1,80 +1,63 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 const Login: React.FC = () => {
+  // Queste sono le variabili che mancavano e che causavano l'errore
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState(''); // Nota: controlla se in LoginReq.java si chiama 'password' o 'pwd'
-  const [error, setError] = useState('');
 
-  const handleLogin = async (e: React.FormEvent) => {
+  // Questa è la funzione che gestisce il click su "Entra"
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setErrorMsg('');
 
     try {
-      // Chiamata al tuo backend
       const response = await fetch('http://localhost:8080/rest/user/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userName: userName, password: password }) 
+        body: JSON.stringify({ email, pwd: password })
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        // Salviamo l'utente nel LocalStorage per ricordarci che è loggato!
-        // Ci assicuriamo di salvare anche lo userName perché ci serve per il carrello
-        localStorage.setItem('user', JSON.stringify({ ...data, userName: userName }));
-        
-        // Lo mandiamo alla home
-        navigate('/home');
-      } else {
-        setError('Credenziali non valide. Riprova.');
+      if (!response.ok) {
+        throw new Error('Credenziali non valide');
       }
-    } catch (err) {
-      setError('Errore di connessione al server.');
+
+      const data = await response.json(); 
+      login(data);
+      navigate('/home'); 
+
+    } catch (error: any) {
+      setErrorMsg("Errore di connessione o credenziali errate. Riprova.");
     }
   };
 
   return (
-  <div className="container-fluid d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
-    <div className="card shadow-lg p-4" style={{ width: '100%', maxWidth: '400px', borderRadius: '15px' }}>
-      <h2 className="text-center mb-4 text-success">Bentornato</h2>
-      { }
-    
-    {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
-
-      <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <div>
-          <label>Username</label>
-          <input 
-            type="text" 
-            value={userName} 
-            onChange={(e) => setUserName(e.target.value)} 
-            required 
-            style={{ width: '100%', padding: '8px' }} 
-          />
-        </div>
+    <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '80vh', width: '100%' }}>
+      <div className="card shadow-sm p-4" style={{ width: '100%', maxWidth: '400px', borderRadius: '15px', border: '1px solid #eee' }}>
+        <h2 className="text-center mb-4" style={{ color: '#035826', fontWeight: 'bold' }}>Accedi</h2>
         
-        <div>
-          <label>Password</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-            style={{ width: '100%', padding: '8px' }} 
-          />
-        </div>
-        <button type="submit" style={{ padding: '10px', background: '#2e7d32', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-          Login
-        </button>
-      </form>
-      <p style={{ textAlign: 'center', marginTop: '15px' }}>
-        Non hai un account? <Link to="/register">Registrati qui</Link>
-      </p>
+        {errorMsg && <div className="alert alert-danger py-2 text-center">{errorMsg}</div>}
+        
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label fw-semibold">Email</label>
+            <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </div>
+          <div className="mb-4">
+            <label className="form-label fw-semibold">Password</label>
+            <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </div>
+          <button type="submit" className="btn w-100 fw-bold text-white" style={{ backgroundColor: '#035826', padding: '10px' }}>
+            Entra
+          </button>
+        </form>
+      </div>
     </div>
-    </div>
-  
   );
 };
 
