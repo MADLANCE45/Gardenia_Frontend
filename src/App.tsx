@@ -1,33 +1,28 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
-import Header from './components/Header'; 
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './components/Home';
 import Login from './components/Login';
-import Register from './components/Register.tsx';
-import Home from './components/Home.tsx';
-import ProductDetails from './components/ProductDetails.tsx';
+import Register from './components/Register';
+import ProductDetails from './components/ProductDetails';
 
 function App() {
+  const [cartCounter, setCartCounter] = useState(0);
+
   return (
-    <BrowserRouter>
-      {/* L'Header sta fuori da Routes, così è visibile in ogni pagina */}
-      <Header /> 
+    <Router>
+      <Header cartCounter={cartCounter} />
       
-      <main style={{ minHeight: '80vh', padding: '20px' }}>
+      {/* ABBIAMO RIMOSSO IL className="container" PER OCCUPARE TUTTA LA PAGINA */}
+      <div style={{ width: '100%' }}>
         <Routes>
-          {/* Rotta di default */}
-          <Route path="/" element={<Navigate to="/login" />} /> 
-          
-          {/* Le nostre pagine */}
+          <Route path="/" element={<Home setCartCounter={setCartCounter} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} />
-
-          {/* ROTTA CORRETTA PER IL DETTAGLIO PRODOTTO */}
           <Route path="/product/:id" element={<ProductDetails />} />
-
         </Routes>
-      </main>
-    </BrowserRouter>
+      </div>
+    </Router>
   );
 }
 
