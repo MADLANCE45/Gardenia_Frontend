@@ -1,49 +1,75 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { CartContext } from '../context/CartContext'; 
 
-interface HeaderProps {
-  cartCounter: number;
-}
+const Header: React.FC = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+  const { cartCount } = useContext(CartContext);
 
-const Header: React.FC<HeaderProps> = ({ cartCounter }) => {
+  useEffect(() => {
+    const userString = localStorage.getItem('user');
+    if (userString) {
+      setUser(JSON.parse(userString));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/login');
+    window.location.reload(); 
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: '#1b5e20', padding: '15px 5%' }}>
-      <div className="container-fluid">
+    <nav className="navbar navbar-dark" style={{ backgroundColor: '#1b5e20', padding: '10px 5%' }}>
+      {/* d-flex e justify-content-between forzano la separazione destra/sinistra */}
+      <div className="container-fluid d-flex justify-content-between align-items-center">
         
-        {/* LOGO E TITOLO AGGIORNATI QUI */}
-        <Link className="navbar-brand d-flex align-items-center gap-3" to="/">
+        {/* GRUPPO SINISTRA: Logo */}
+        <Link className="navbar-brand d-flex align-items-center gap-3" to="/home">
           <img 
-            src="/logo.jpg" /* Se l'hai messa in public/img/logo.jpg, scrivi /img/logo.jpg */
+            src="/logo.jpg" 
             alt="Logo Gardenia" 
             style={{ 
-              height: '55px', 
-              width: '55px', 
-              objectFit: 'cover', 
-              borderRadius: '50%', /* Questo rende l'immagine rotonda. Se la vuoi quadrata, cancella questa riga */
-              border: '2px solid white', /* Bordino bianco elegante per farla staccare dal verde scuro */
-              boxShadow: '0 2px 4px rgba(0,0,0,0.2)' /* Piccola ombra */
+              height: '55px', width: '55px', objectFit: 'cover', 
+              borderRadius: '50%', border: '2px solid white'
             }} 
           />
-          <span className="fw-bold fs-3 text-white" style={{ letterSpacing: '1px' }}>Gardenia</span>
+          <span className="fw-bold fs-3 text-white">Gardenia</span>
         </Link>
-        
-        <div className="collapse navbar-collapse">
-          <ul className="navbar-nav ms-auto align-items-center">
-            <li className="nav-item">
-              <Link className="nav-link fs-5 text-white" to="/login">Accedi</Link>
-            </li>
-            <li className="nav-item ms-3">
-              <Link className="btn btn-light text-success fw-bold position-relative" to="/carrello" style={{ borderRadius: '25px', padding: '8px 20px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-                🛒 Carrello
-                {cartCounter > 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {cartCounter}
-                  </span>
-                )}
-              </Link>
-            </li>
-          </ul>
+
+        {/* GRUPPO DESTRA: Utente e Carrello */}
+        <div className="d-flex align-items-center gap-4">
+          
+          {/* Sezione Profilo Utente */}
+          {user ? (
+            <div className="d-flex align-items-center gap-3 text-white">
+              <span className="d-none d-sm-inline">Ciao, <strong>{user.userName}</strong></span>
+              <button onClick={handleLogout} className="btn btn-outline-light btn-sm" style={{ borderRadius: '20px' }}>
+                Logout
+              </button>
+            </div>
+          ) : (
+            <Link className="nav-link text-white fw-bold" to="/login">Accedi</Link>
+          )}
+
+          {/* Tasto Carrello */}
+          <Link 
+            className="btn btn-light text-success fw-bold position-relative d-flex align-items-center gap-2" 
+            to="/carrello" 
+            style={{ borderRadius: '25px', padding: '8px 20px', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}
+          >
+            <span>🛒</span>
+            <span className="d-none d-md-inline">Carrello</span>
+            {cartCount > 0 && (
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {cartCount}
+              </span>
+            )}
+          </Link>
         </div>
+
       </div>
     </nav>
   );

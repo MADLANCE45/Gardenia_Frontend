@@ -49,14 +49,12 @@ const ProductDetails: React.FC = () => {
   };
 
   // Funzione recuperata dalla Home per mostrare l'immagine corretta
-  const getImageUrl = (prod: any): string => {
-    if (!prod || !prod.images || prod.images.length === 0) {
-      return '/img/image.png'; // Immagine di default se non c'è
-    }
-    const link = prod.images[0].link;
-    return link.startsWith('http') ? link : `http://localhost:8080/rest/image/file/${link}`;
-  };
-
+  const getImageUrl = (prod: any) => {
+  if (!prod.images || prod.images.length === 0) return '/image.png'; // Immagine di riserva in public/
+  const link = prod.images[0].link;
+  // Se è un link esterno (inizia con http), lo usiamo direttamente
+  return link.startsWith('http') ? link : `http://localhost:8080/rest/image/file/${link}`;
+}
   if (loading) return <h2 className="text-center mt-5">Caricamento...</h2>;
   if (!product) return <h2 className="text-center mt-5 text-danger">Prodotto non trovato</h2>;
 
