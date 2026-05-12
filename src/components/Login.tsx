@@ -12,32 +12,32 @@ const Login: React.FC = () => {
   const { login } = useContext(AuthContext); 
 
   const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError('');
+    e.preventDefault();
+    setError('');
 
-  try {
-    const response = await fetch('http://localhost:8080/rest/user/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userName: userName, password: password }) 
-    });
+    try {
+      const response = await fetch('http://localhost:8080/rest/user/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName: userName, password: password }) 
+      });
 
-    // Leggiamo l'oggetto Resp.java
-    const result = await response.json();
+      const result = await response.json();
 
-    // Verifichiamo il campo 'rc' (reale successo del login nel backend)
-    if (response.ok && result.rc === true) {
-      // I dati dell'utente sono dentro result.data
-      login({ ...result.data, userName: userName }); 
-      navigate('/home');
-    } else {
-      // Mostriamo il messaggio d'errore inviato dal backend (campo 'msg')
-      setError(result.msg || 'Credenziali non valide. Riprova.');
+      // Il backend imposta status 200 OK se ha successo, 400 se fallisce.
+      // Quindi response.ok è sufficiente!
+      if (response.ok) {
+        // Il backend invia l'oggetto utente DIRETTAMENTE, non dentro "data"
+        login({ ...result, userName: userName }); 
+        navigate('/home');
+      } else {
+        // Se c'è un errore (es. BAD_REQUEST), il backend invia la classe Resp con "msg"
+        setError(result.msg || 'Credenziali non valide. Riprova.');
+      }
+    } catch (err) {
+      setError('Errore di connessione al server.');
     }
-  } catch (err) {
-    setError('Errore di connessione al server.');
-  }
-};
+  };
 
   return (
     <div className="d-flex justify-content-center align-items-center w-100" style={{ minHeight: '80vh' }}>
