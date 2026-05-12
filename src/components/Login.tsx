@@ -36,10 +36,12 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '8px' }}>
-      <h2 style={{ textAlign: 'center', color: '#2e7d32' }}>Accedi a Gardenia</h2>
-      
-      {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+  <div className="container-fluid d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+    <div className="card shadow-lg p-4" style={{ width: '100%', maxWidth: '400px', borderRadius: '15px' }}>
+      <h2 className="text-center mb-4 text-success">Bentornato</h2>
+      { }
+    
+    {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
 
       <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
         <div>
@@ -52,6 +54,7 @@ const Login: React.FC = () => {
             style={{ width: '100%', padding: '8px' }} 
           />
         </div>
+        
         <div>
           <label>Password</label>
           <input 
@@ -70,6 +73,8 @@ const Login: React.FC = () => {
         Non hai un account? <Link to="/register">Registrati qui</Link>
       </p>
     </div>
+    </div>
+  
   );
 };
 

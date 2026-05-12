@@ -14,7 +14,7 @@ interface HomeProps {
   setCartCounter: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Home: React.FC = () => { 
+const Home: React.FC<HomeProps> = ({ setCartCounter }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   
@@ -25,17 +25,19 @@ const Home: React.FC = () => {
       .catch(err => console.error("Errore fetch", err));
   }, []);
 
- const getImageUrl = (prod: any) => {
-  if (!prod.images || prod.images.length === 0) return '/image.png'; // Immagine di riserva in public/
+ const getImageUrl = (prod: any): string => {
+  if (!prod.images || prod.images.length === 0) {
+    // Se l'hai messo direttamente dentro public/.png
+    return '/logo.png'; 
+  }
   const link = prod.images[0].link;
-  // Se è un link esterno (inizia con http), lo usiamo direttamente
   return link.startsWith('http') ? link : `http://localhost:8080/rest/image/file/${link}`;
 };
 
   const addToCart = async (e: React.MouseEvent, productId: number) => {
     e.stopPropagation(); // Evita che cliccando il bottone si apra la pagina dettaglio
     // ... qui andrà la logica della chiamata POST al tuo DB per il carrello
-    
+    setCartCounter(prev => prev + 1);
   };
 
   return (
