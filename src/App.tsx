@@ -13,7 +13,8 @@ import { CartProvider } from './context/CartContext';
 import UserLayout from './components/user/UserLayout';
 import Orders from './components/user/Orders';
 import Overview from './components/user/Overview';
-
+import Address from './components/user/Address';
+import EditProfile from './components/user/EditProfile';
 function App() {
   return (
     <AuthProvider>
@@ -23,9 +24,10 @@ function App() {
           <Routes>
             <Route path="/user" element={<UserLayout />}>
   {/* Aggiungi questa riga per la pagina di benvenuto del profilo */}
-  <Route path="overview" element={<Overview />} /> 
-  <Route path="orders" element={<Orders />} />
-  <Route path="address" element={<address />} />
+            <Route path="overview" element={<Overview />} /> 
+            <Route path="orders" element={<Orders />} />
+            <Route path="address" element={<Address />} />
+            <Route path="profile" element={<EditProfile />} />
   {/* Rimosso Wishlist */}
 </Route>
             <Route path="/" element={<Home />} />

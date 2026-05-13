@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext'; // 1. Importa il context
-
+import './Auth.css';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
@@ -40,43 +40,41 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center w-100" style={{ minHeight: '80vh' }}>
-      <div className="card shadow-lg p-4" style={{ width: '100%', maxWidth: '400px', borderRadius: '15px' }}>
-        <h2 className="text-center mb-4 text-success fw-bold">Bentornato</h2>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2 className="auth-title">Bentornato</h2>
         
-        {error && <div className="alert alert-danger text-center">{error}</div>}
+        {error && <div className="auth-error">{error}</div>}
 
-        <form onSubmit={handleLogin} className="d-flex flex-column gap-3">
-          <div>
-            <label className="form-label fw-bold">Username</label>
+        <form onSubmit={handleLogin} className="auth-form">
+          <div className="form-group">
+            <label>Username</label>
             <input 
               type="text" 
-              className="form-control"
               value={userName} 
               onChange={(e) => setUserName(e.target.value)} 
               required 
             />
           </div>
           
-          <div>
-            <label className="form-label fw-bold">Password</label>
+          <div className="form-group">
+            <label>Password</label>
             <input 
               type="password" 
-              className="form-control"
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               required 
             />
           </div>
           
-          <button type="submit" className="btn btn-success mt-2 fw-bold" style={{ padding: '10px' }}>
+          <button type="submit" className="auth-btn">
             Accedi
           </button>
         </form>
         
-        <p className="text-center mt-4">
-          Non hai un account? <Link to="/register" className="text-success fw-bold">Registrati qui</Link>
-        </p>
+        <div className="auth-footer">
+          Non hai un account? <Link to="/register">Registrati qui</Link>
+        </div>
       </div>
     </div>
   );
