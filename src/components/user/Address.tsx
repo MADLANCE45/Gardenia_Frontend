@@ -138,7 +138,7 @@ const Address: React.FC = () => {
           {addresses.map((addr, index) => (
             <div key={addr.id || index} className="address-card">
               <div className="card-header">
-                <div className="user-name">{user?.nome} {user?.cognome}</div>
+                <div className="user-name">{user?.firstName} {user?.lastName}</div>
                 {index === 0 && <div className="badge-shipping">Principale</div>}
               </div>
               
@@ -150,8 +150,8 @@ const Address: React.FC = () => {
               
               <div className="card-actions">
                 <span className="action-link text-danger" onClick={() => deleteAddress(addr.id)}>
-                  Elimina 
-                    </span>
+                  Elimina 🗑️
+              </span>
               </div>
             </div>
           ))}

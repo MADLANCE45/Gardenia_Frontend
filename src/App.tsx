@@ -5,7 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ProductDetails from './components/ProductDetails';
 import Carrello from './components/Carrello/Carrello';
-import Pagamento from './components/Pagamento/Pagamento'; // 1. Importa il nuovo componente
+import Pagamento from './components/Pagamento/Pagamento';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { AuthProvider } from './context/AuthContext';
@@ -15,6 +15,11 @@ import Orders from './components/user/Orders';
 import Overview from './components/user/Overview';
 import Address from './components/user/Address';
 import EditProfile from './components/user/EditProfile';
+
+// 1. IMPORTA L'ADMIN E LE SOTTOCATEGORIE
+import Admin from './components/Admin/Admin';
+import CategoryProducts from './components/CategoryProducts';
+
 function App() {
   return (
     <AuthProvider>
@@ -23,13 +28,12 @@ function App() {
           <Header />
           <Routes>
             <Route path="/user" element={<UserLayout />}>
-  {/* Aggiungi questa riga per la pagina di benvenuto del profilo */}
-            <Route path="overview" element={<Overview />} /> 
-            <Route path="orders" element={<Orders />} />
-            <Route path="address" element={<Address />} />
-            <Route path="profile" element={<EditProfile />} />
-  {/* Rimosso Wishlist */}
-</Route>
+              <Route path="overview" element={<Overview />} /> 
+              <Route path="orders" element={<Orders />} />
+              <Route path="address" element={<Address />} />
+              <Route path="profile" element={<EditProfile />} />
+            </Route>
+            
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<AboutUs />} />
@@ -37,8 +41,14 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/carrello" element={<Carrello />} />
-            {/* 2. Aggiungi la rotta per il pagamento */}
             <Route path="/pagamento" element={<Pagamento />} />
+            
+            {/* ROTTA ADMIN */}
+            <Route path="/admin" element={<Admin />} />
+
+            {/* ROTTA SOTTOCATEGORIE (Questa è quella che fa funzionare il menu!) */}
+            <Route path="/category/:categoryName/:subcategoryName" element={<CategoryProducts />} />
+
           </Routes>
           <Footer />
         </Router>

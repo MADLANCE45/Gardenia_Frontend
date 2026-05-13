@@ -230,7 +230,19 @@
   z-index: 10;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-
+.admin-badge-header {
+  background-color: #d32f2f; /* Rosso scuro per autorità */
+  color: white;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+  margin-top: 2px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
 .icon-container {
   position: relative;
   display: inline-flex;

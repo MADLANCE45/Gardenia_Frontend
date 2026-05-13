@@ -1,11 +1,13 @@
 import React, { createContext, useState, useEffect } from 'react';
 
+// I NOMI ORA CORRISPONDONO AL TUO UserDTO.java
 export interface User {
-  id: number;
-  nome: string;
-  cognome: string;
-  ruolo: string;
-  userName?: string; 
+  userName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  role: string; 
 }
 
 interface AuthContextType {
@@ -23,7 +25,6 @@ export const AuthContext = createContext<AuthContextType>({
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  // Aggiungi questo: Controlla se c'è un utente nel localStorage al caricamento dell'app
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
