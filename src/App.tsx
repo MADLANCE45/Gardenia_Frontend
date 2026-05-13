@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import AboutUs from './components/AboutUs';
 import Login from './components/Login';
 import Register from './components/Register';
 import ProductDetails from './components/ProductDetails';
-import Carrello from './components/Carrello';
-import Pagamento from './components/Pagamento'; // 1. Importa il nuovo componente
+import Carrello from './components/Carrello/Carrello';
+import Pagamento from './components/Pagamento/Pagamento'; // 1. Importa il nuovo componente
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { AuthProvider } from './context/AuthContext';
@@ -13,6 +13,7 @@ import { CartProvider } from './context/CartContext';
 import UserLayout from './components/user/UserLayout';
 import Orders from './components/user/Orders';
 import Overview from './components/user/Overview';
+
 function App() {
   return (
     <AuthProvider>

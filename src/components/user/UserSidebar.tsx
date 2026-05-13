@@ -7,8 +7,8 @@ const UserSidebar: React.FC = () => {
     <div className="sidebar-box">
       <h3 className="welcome-msg">My Account</h3>
       <nav className="nav-menu">
-        <NavLink to="/user/orders" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-          📦 My Orders
+       <NavLink to="/user/orders" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+  📦      My Orders
         </NavLink>
         <NavLink to="/user/address" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
           📍 My Addresses
