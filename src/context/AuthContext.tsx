@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
 
-// I NOMI ORA CORRISPONDONO AL TUO UserDTO.java
 export interface User {
   userName: string;
   firstName: string;
@@ -8,6 +7,7 @@ export interface User {
   email: string;
   phone: string;
   role: string; 
+  
 }
 
 interface AuthContextType {

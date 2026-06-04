@@ -75,12 +75,12 @@ const Orders: React.FC = () => {
               </div>
               
               <div className="card-actions">
-                <span 
-                  className="action-link secondary" 
-                  onClick={() => navigate(`/user/orders/${order.id}`)}
-                >
-                  View Order Details ➔
-                </span>
+                <button 
+                className="btn btn-sm btn-success" 
+                        onClick={() => navigate(`/user/orders/${order.id}`)}
+                    >
+                View Order Details
+                </button>
               </div>
             </div>
           ))}

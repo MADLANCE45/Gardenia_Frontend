@@ -15,7 +15,7 @@ import Orders from './components/user/Orders';
 import Overview from './components/user/Overview';
 import Address from './components/user/Address';
 import EditProfile from './components/user/EditProfile';
-
+import OrderDetail from './components/user/OrderDetail';
 // 1. IMPORTA L'ADMIN E LE SOTTOCATEGORIE
 import Admin from './components/Admin/Admin';
 import CategoryProducts from './components/CategoryProducts';
@@ -28,12 +28,13 @@ function App() {
           <Header />
           <Routes>
             <Route path="/user" element={<UserLayout />}>
+            <Route path="orders/:id" element={<OrderDetail />} />  
               <Route path="overview" element={<Overview />} /> 
               <Route path="orders" element={<Orders />} />
               <Route path="address" element={<Address />} />
               <Route path="profile" element={<EditProfile />} />
             </Route>
-            
+                      
             <Route path="/" element={<Home />} />
             <Route path="/home" element={<Home />} />
             <Route path="/about" element={<AboutUs />} />
