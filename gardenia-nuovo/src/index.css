@@ -1,0 +1,15 @@
+/* Effetto Hover per le icone utente */
+.action-link {
+  transition: color 0.3s ease;
+}
+.action-link:hover {
+  color: #035826 !important;
+}
+
+/* Effetto Hover per il menu centrale */
+.nav-menu-link {
+  position: relative;
+}
+.nav-menu-link:hover {
+  color: #035a27 !important;
+}
