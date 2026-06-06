@@ -121,9 +121,9 @@ const Carrello: React.FC = () => {
                   {new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(item.price * item.amount)}
                 </div>
 
-                <button className="remove-all-btn" onClick={() => rimuoviTutto(item)} title="Remove item">
-                  🗑️
-                </button>
+                <button className="remove-all-btn" onClick={() => rimuoviTutto(item)} title="Remove item" style={{ background: 'transparent', border: 'none' }}>
+                <i className="bi bi-trash fs-4 text-danger"></i>
+                    </button>
               </div>
             ))}
           </div>
@@ -137,8 +137,8 @@ const Carrello: React.FC = () => {
             </div>
 
             <button className="checkout-btn" onClick={() => navigate('/pagamento')}>
-              Go to Payment ➔
-            </button>
+            Go to Payment <i className="bi bi-arrow-right ms-2"></i>
+              </button>
           </div>
         </>
       ) : (

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CartContext } from '../../context/CartContext'; // NUOVO: Importiamo il context
 import './Pagamento.css';
 
 interface CartItem {
@@ -11,6 +12,9 @@ interface CartItem {
 
 const Pagamento: React.FC = () => {
   const navigate = useNavigate();
+  // NUOVO: Estraiamo clearCart dal context
+  const { clearCart } = useContext(CartContext); 
+  
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
@@ -19,7 +23,6 @@ const Pagamento: React.FC = () => {
   const [isError, setIsError] = useState(false);
   const [metodoScelto, setMetodoScelto] = useState('carta');
 
-  // 1. Recuperiamo il carrello all'apertura della pagina
   useEffect(() => {
     const fetchCart = async () => {
       const userString = localStorage.getItem('user');
@@ -46,7 +49,7 @@ const Pagamento: React.FC = () => {
   }, [navigate]);
 
   const subtotale = cartItems.reduce((acc, item) => acc + (item.price * item.amount), 0);
-  const totale = subtotale; // + shipping se lo aggiungi
+  const totale = subtotale;
 
   const notify = (msg: string, errorState: boolean = false) => {
     setToastMessage(msg);
@@ -63,8 +66,6 @@ const Pagamento: React.FC = () => {
     if (!userString) return;
     const user = JSON.parse(userString);
 
-    // RICREIAMO IL PAYLOAD ESATTO DI ANGULAR
-    // Questi sono i campi esatti che il tuo Spring Boot si aspetta!
     const ordineDaInviare = {
       userId: user.userName,
       wharehouse: 'Main', 
@@ -75,20 +76,20 @@ const Pagamento: React.FC = () => {
     };
 
     try {
-      // ATTENZIONE ALL'URL: ho messo "userorder" tutto minuscolo. 
-      // Nelle API Spring Boot di solito non si usa il CamelCase per i path.
       const response = await fetch('http://localhost:8080/rest/order/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify(ordineDaInviare)
-});
+        body: JSON.stringify(ordineDaInviare)
+      });
 
-      // Leggiamo la risposta (il tuo backend usa sempre Resp.java o qualcosa di simile)
       const result = await response.json().catch(() => ({})); 
 
       if (response.ok && result.rc !== false) {
         setLoading(false);
-        notify('Order placed successfully! Redirecting...');
+        // ECCO DOVE VA: Azzera il carrello nel frontend!
+        clearCart(); 
+        
+        notify('Ordine completato con successo! Reindirizzamento...');
         setTimeout(() => navigate('/user/orders'), 2000);
       } else {
         throw new Error(result.msg || 'Errore durante la creazione dell\'ordine');
@@ -125,18 +126,13 @@ const Pagamento: React.FC = () => {
 
             <h3 className="mt-30">Payment Method</h3>
             <div className="payment-methods">
-              <button 
-                className={`payment-btn ${metodoScelto === 'carta' ? 'active' : ''}`}
-                onClick={() => setMetodoScelto('carta')}
-              >
-                💳 Credit Card
-              </button>
-              <button 
-                className={`payment-btn ${metodoScelto === 'paypal' ? 'active' : ''}`}
-                onClick={() => setMetodoScelto('paypal')}
-              >
-                📱 PayPal
-              </button>
+              <button className={`payment-btn ${metodoScelto === 'carta' ? 'active' : ''}`} onClick={() => setMetodoScelto('carta')}>
+  <i className="bi bi-credit-card me-2"></i> Credit Card
+</button>
+<button className={`payment-btn ${metodoScelto === 'paypal' ? 'active' : ''}`} onClick={() => setMetodoScelto('paypal')}>
+  <i className="bi bi-wallet2 me-2"></i> PayPal
+</button>
+<div className="secure-badge"><i className="bi bi-lock-fill me-2"></i> Encrypted and secure payment</div>
             </div>
 
             {metodoScelto === 'carta' && (

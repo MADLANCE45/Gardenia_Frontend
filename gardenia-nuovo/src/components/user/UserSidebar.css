@@ -48,3 +48,20 @@
   margin-top: 10px;
   font-weight: bold;
 }
+/* UserSidebar.css */
+
+.logout-simple-text {
+  color: #8a8a8a; /* Grigio tenue */
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  display: inline-block;
+  padding: 10px;
+}
+
+.logout-simple-text:hover {
+  color: #dc3545; /* Diventa rosso al passaggio del mouse */
+  text-decoration: underline;
+}

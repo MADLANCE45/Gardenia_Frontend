@@ -2,20 +2,25 @@ import React, { createContext, useState, type ReactNode } from 'react';
 
 interface CartContextType {
   cartCount: number;
-  // Aggiungiamo il prezzo ai parametri richiesti
   addToCart: (productId: number, quantity: number, price: number) => Promise<boolean>;
+  clearCart: () => void; // NUOVO: Funzione per svuotare il carrello visivo
 }
 
 export const CartContext = createContext<CartContextType>({
   cartCount: 0,
   addToCart: async () => false,
+  clearCart: () => {}, // Inizializzazione a vuoto
 });
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cartCount, setCartCount] = useState(0);
 
+  // NUOVA FUNZIONE: Azzera il conteggio
+  const clearCart = () => {
+    setCartCount(0);
+  };
+
   const addToCart = async (productId: number, quantity: number, price: number): Promise<boolean> => {
-    
     const userString = localStorage.getItem('user');
     
     if (!userString) {
@@ -26,7 +31,6 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const user = JSON.parse(userString);
     const userName = user.userName; 
 
-    // OGGETTO CORRETTO: Ora inviamo anche il prezzo come richiesto da Java!
     const cartItemReq = {
       userName: userName,
       idProduct: productId,
@@ -44,7 +48,8 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
 
       if (response.ok) {
-        setCartCount((prevCount) => prevCount + quantity);
+        // Mi assicuro che la quantità venga sommata come numero
+        setCartCount((prevCount) => prevCount + Number(quantity));
         return true;
       } else {
         console.error("Errore dal server durante l'aggiunta al carrello");
@@ -57,7 +62,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <CartContext.Provider value={{ cartCount, addToCart }}>
+    <CartContext.Provider value={{ cartCount, addToCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

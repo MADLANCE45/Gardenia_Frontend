@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ProductDetails from './components/ProductDetails';
 import Carrello from './components/Carrello/Carrello';
+
 import Pagamento from './components/Pagamento/Pagamento';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -43,7 +44,7 @@ function App() {
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/carrello" element={<Carrello />} />
             <Route path="/pagamento" element={<Pagamento />} />
-            
+            <Route path="/about-us" element={<AboutUs />} />
             {/* ROTTA ADMIN */}
             <Route path="/admin" element={<Admin />} />
 

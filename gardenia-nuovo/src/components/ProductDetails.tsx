@@ -58,7 +58,7 @@ const ProductDetails: React.FC = () => {
   if (loading) return <h2 className="text-center mt-5">Caricamento...</h2>;
   if (!product) return <h2 className="text-center mt-5 text-danger">Prodotto non trovato</h2>;
 
-  return (
+ return (
     <div className="container mt-5">
       {/* Bottone per tornare indietro */}
       <button className="btn btn-outline-secondary mb-4" onClick={() => navigate(-1)}>
@@ -85,27 +85,44 @@ const ProductDetails: React.FC = () => {
           
           <h3 className="fw-bold mb-4">€ {(product.price || 0).toFixed(2)}</h3>
           
-          <div className="d-flex align-items-center gap-3 bg-light p-3 rounded border">
-            <input 
-              type="number" 
-              className="form-control text-center fw-bold" 
-              value={quantity} 
-              min="1"
-              onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))} 
-              style={{ width: '80px', height: '50px' }}
-            />
+          {/* ---- DA QUI INIZIA LA PARTE MODIFICATA ---- */}
+          <div className="add-to-cart-container d-flex align-items-center gap-3 mt-2">
+            
+            {/* Selettore Quantità con i bottoni + e - */}
+            <div className="quantity-selector d-flex align-items-center border rounded-3 overflow-hidden" style={{ height: '48px', backgroundColor: '#f8f9fa' }}>
+              <button 
+                className="btn border-0 h-100 px-3 fw-bold" 
+                onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                style={{ backgroundColor: 'transparent' }}
+              >
+                -
+              </button>
+              <span className="px-3 fw-bold">{quantity}</span>
+              <button 
+                className="btn border-0 h-100 px-3 fw-bold" 
+                onClick={() => setQuantity(q => q + 1)}
+                style={{ backgroundColor: 'transparent' }}
+              >
+                +
+              </button>
+            </div>
+
+            {/* Bottone Verde Lineare */}
             <button 
               onClick={handleAddToCart} 
-              className="btn btn-success btn-lg w-100 fw-bold"
-              style={{ height: '50px' }}
+              className="btn btn-success flex-grow-1 h-100 d-flex justify-content-center align-items-center gap-2 fw-bold rounded-3 shadow-sm"
+              style={{ height: '48px', fontSize: '16px', backgroundColor: '#28a745', borderColor: '#28a745' }}
             >
-              🛒 AGGIUNGI AL CARRELLO
+              Aggiungi al Carrello
             </button>
           </div>
+          {/* ---- FINE PARTE MODIFICATA ---- */}
+
         </div>
       </div>
     </div>
   );
+  
 };
 
 export default ProductDetails;

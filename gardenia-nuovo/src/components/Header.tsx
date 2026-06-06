@@ -118,17 +118,18 @@ const Header: React.FC = () => {
             )}
 
             {isLoggedIn ? (
-              <>
-                <Link to="/user/overview" className="action-link text-decoration-none">
-                  <i className="bi bi-person-circle text-success fs-4"></i>
-                  <span className="fw-bold" style={{ fontSize: '14px' }}>Ciao, {user?.firstName}</span> 
-                </Link>
-                <button onClick={logout} className="action-link btn-logout">
-                  <i className="bi bi-box-arrow-right text-danger fs-5"></i>
-                  <span style={{ fontSize: '13px' }}>Logout</span>
-                </button>
-              </>
-            ) : (
+  <>
+    <Link to="/user/overview" className="action-link text-decoration-none">
+      {/* Rimosso "Ciao," e inserito il fallback per mostrare l'username se il nome è vuoto */}
+      <span className="fw-bold" style={{ fontSize: '14px' }}>
+        {user?.firstName || user?.userName}
+      </span> 
+    </Link>
+    <button onClick={logout} className="action-link btn-logout">
+      <span style={{ fontSize: '13px' }}>Logout</span>
+    </button>
+  </>
+): (
               <Link to="/login" className="action-link">
                 <i className="bi bi-person"></i>
                 <span>Accedi</span>
